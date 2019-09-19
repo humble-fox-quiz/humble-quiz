@@ -1,5 +1,10 @@
 <template>
   <div class="container my-5">
+      <div class="row mb-5">
+          <div class="col-md-12 d-flex justify-content-center">
+              <h1>10 sec</h1>
+          </div>
+      </div>
       <div class="row">
           <div class="col-md-12 d-flex justify-content-center">
               <img src="https://via.placeholder.com/150" alt="">

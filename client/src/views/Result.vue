@@ -10,19 +10,18 @@
           <div class="card-body">
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between">
-                Player 1
-                <button class="btn btn-sm btn-warning">Leave Room</button>
+                <span>Player 1</span>
+                <span>Score : 90</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
-                Player 2
-                <button class="btn btn-sm btn-warning">Leave Room</button>
+                <span>Player 2</span>
+                <span>Score : 80</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
-                Player 3
-                <button class="btn btn-sm btn-warning">Leave Room</button>
+                <span>Player 3</span>
+                <span>Score : 70</span>
               </li>
             </ul>
-            <button class="btn btn-primary my-3" style="width:100%">Start</button>
           </div>
         </div>
       </div>
@@ -32,7 +31,7 @@
 
 <script>
 export default {
-  name: "waiting"
+  name: "result"
 };
 </script>
 

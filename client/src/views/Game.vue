@@ -5,7 +5,7 @@
               <img src="https://via.placeholder.com/150" alt="">
           </div>
           <div class="col-md-12 my-3">
-              <h3>Can you answer this Question ?</h3>
+              <h3>Can you answer this Question ? </h3>
           </div>
       </div>
       <div class="row mt-5">

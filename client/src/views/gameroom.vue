@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       roomId: "",
-      stageEnded: 4,
+      stageEnded: 6,
       canAnswer: true
     };
   },
@@ -119,7 +119,7 @@ export default {
       //   console.log(this.theplayer)
       //   console.log(this.question[this.stage].correctAnswer);
       //   console.log(value);
-      if (theplayer) {
+      if (this.theplayer) {
         db.collection("rooms")
           .doc(this.$route.params.id)
           .get()
@@ -152,9 +152,9 @@ export default {
   },
   watch: {
     stage(newval, oldvalue) {
-      console.log(this.playing);
+    //   console.log(this.playing);
       if (localStorage.userId == this.room.roomMaster.id) {
-        if (newval <= 3 && this.playing) {
+        if (newval <= 5 && this.playing) {
           //   this.playing()
           setTimeout(() => {
             let userId = localStorage.getItem("userId");
@@ -164,9 +164,9 @@ export default {
               .then(data => {
                 let obj = { ...data.data() };
                 obj.players = obj.players.map(el => {
-                  if (el.id == userId) {
+                //   if (el.id == userId) {
                     el.answer = true;
-                  }
+                //   }
                   return el;
                 });
                 return db

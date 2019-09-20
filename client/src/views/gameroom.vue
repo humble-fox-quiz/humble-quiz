@@ -41,7 +41,7 @@
         </div>
         <div class="row">
           <div class="col-md-12 d-flex justify-content-center">
-            <!-- <img src="https://via.placeholder.com/150" alt /> -->
+            <img :src="question[stage].image" alt />
           </div>
         </div>
 

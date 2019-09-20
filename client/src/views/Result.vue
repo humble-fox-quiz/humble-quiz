@@ -14,14 +14,17 @@
                 <li class="list-group-item d-flex justify-content-between">
                   <span>Player 1</span>
                   <span>Score : 90</span>
+                  <button class="btn btn-sm btn-warning">Leave Room</button>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                   <span>Player 2</span>
                   <span>Score : 80</span>
+                  <button class="btn btn-sm btn-warning">Leave Room</button>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                   <span>Player 3</span>
                   <span>Score : 70</span>
+                  <button class="btn btn-sm btn-warning">Leave Room</button>
                 </li>
               </ul>
             </div>

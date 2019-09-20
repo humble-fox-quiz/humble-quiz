@@ -120,11 +120,6 @@ export default new Vuex.Store({
         })
     },
     getQuestions({ commit }) {
-
-      questionIndex = Math.floor(Math.random() * availableQuestions.length)
-      currentQuestion = availableQuestions[questionIndex]
-
-
       let questionList = []
       return new Promise((resolve, reject) => {
         db.collection("questions")
@@ -137,15 +132,21 @@ export default new Vuex.Store({
               // this.$store.commit("")
             })
 
-            if (questionList) {
-              for (let i = 0; i < questionList.length; i++) {
-                let tempArray = []
+            let result = []
 
+            for (let i = 0; i < questionList.length; i++) {
+              let index = Math.floor(Math.random() * questionList.length)
+              if (result.includes(questionList[index])) {
+                i -= 1
+              }
+              else {
+                result.push(questionList[index])
               }
             }
+            console.log(result)
 
-            questionList = questionList.slice(0, 10)
-            resolve(commit("GET_QUESTION", questionList))
+            result = result.slice(0, 10)
+            resolve(commit("GET_QUESTION", result))
           }))
           .catch(err => {
             reject(err)

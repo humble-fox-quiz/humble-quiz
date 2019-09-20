@@ -100,7 +100,7 @@ export default new Vuex.Store({
         .then(room => {
           // console.log(room.data())
           let obj = room.data()
-          obj.players.push({ id: userId, username, score: 0 })
+          obj.players.push({ id: userId, username, score: 0, answer:true})
           return db.collection("rooms").doc(roomId)
             .set(obj)
           // obj.players = listplayers

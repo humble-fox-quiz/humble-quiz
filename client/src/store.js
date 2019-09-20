@@ -30,7 +30,8 @@ export default new Vuex.Store({
       let roomName = payload.roomName
       let roomMasterId;
       dispatch("getQuestions")
-      db.collection("users")
+      .then (()=>{
+        db.collection("users")
         .add({
           username: roomMaster
         })
@@ -59,6 +60,11 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+      
     },
 
     getRoom({ commit, dispatch }, payload) {
@@ -115,7 +121,8 @@ export default new Vuex.Store({
     },
     getQuestions({ commit }) {
       let questionList = []
-      db.collection("questions")
+      return new Promise((resolve, reject)=>{
+        db.collection("questions")
         .get()
         .then((questions => {
           // console.log(question)
@@ -125,11 +132,12 @@ export default new Vuex.Store({
             // this.$store.commit("")
           })
           questionList = questionList.slice(0, 10)
-          commit("GET_QUESTION", questionList)
+          resolve(commit("GET_QUESTION", questionList))
         }))
         .catch(err => {
-          console.log(err)
+         reject(err) 
         })
+      })
     }
   }
 })

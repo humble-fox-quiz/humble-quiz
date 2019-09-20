@@ -1,6 +1,6 @@
 <template>
   <section id="waiting-page">
-    <backround/>
+    <backround />
     <div class="container py-5">
       <div class="row">
         <div class="col-md-12">
@@ -11,16 +11,8 @@
             </div>
             <div class="card-body">
               <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between" v-for>
                   Player 1
-                  <button class="btn btn-sm btn-warning">Leave Room</button>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                  Player 2
-                  <button class="btn btn-sm btn-warning">Leave Room</button>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                  Player 3
                   <button class="btn btn-sm btn-warning">Leave Room</button>
                 </li>
               </ul>
@@ -39,6 +31,11 @@ export default {
   name: "waiting",
   components: {
     Backround
+  },
+  computed: {
+    rooms() {
+      return;
+    }
   }
 };
 </script>

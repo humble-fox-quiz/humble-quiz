@@ -6,13 +6,15 @@
       <div class="row">
         <div class="col-md-6 offset-md-3">
           <h1>Humble Quiz</h1>
-          <input
+          <!-- <input
             autofocus
             type="text"
             class="form-control text-center my-3"
             placeholder="Enter Your Name"
-          />
-          <button class="btn btn-primary px-4">Let's Play</button>
+          />-->
+          <button class="btn btn-primary px-4 mt-3">
+            <router-link to="/home">Let's Play</router-link>
+          </button>
         </div>
       </div>
     </div>
@@ -21,7 +23,7 @@
 
 <script>
 import Backround from "@/components/Background";
-import Music from "../components/Music"
+import Music from "../components/Music";
 
 export default {
   name: "landing",
@@ -32,9 +34,7 @@ export default {
   mounted() {
     // window.addEventListener("mouseup", this.playMusic);
   },
-  methods: {
-
-  }
+  methods: {}
 };
 </script>
 

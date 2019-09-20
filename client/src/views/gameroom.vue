@@ -41,7 +41,7 @@
         </div>
         <div class="row">
           <div class="col-md-12 d-flex justify-content-center">
-            <img :src="question[stage].image" alt />
+            <img style="width: 200px; height: auto" :src="question[stage].image" alt />
           </div>
         </div>
 

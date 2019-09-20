@@ -4,37 +4,23 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <h1>Home</h1>
     <b-button v-b-modal.modal-task class="btn btn-blue-grey">New Room</b-button>
-    
 
     <!-- tampilan list room -->
     <div v-for="room in rooms" :key="room.id">
       <h1>{{room.roomName}}</h1>
-      <b-button v-b-modal.modal-join @click="currentRoomId=room.id" >joinRoom</b-button>
+      <b-button v-b-modal.modal-join @click="currentRoomId=room.id">joinRoom</b-button>
     </div>
 
-
-<b-modal id="modal-join">
+    <b-modal id="modal-join">
       <b-form @submit.prevent="joinRoom" id="joinRoom">
         <b-form-group label="Enter Your Name: " label-for="title">
-          <b-form-input
-            type="text"
-            v-model="guest"
-            placeholder="Enter title"
-            id="title"
-            required
-          ></b-form-input>
+          <b-form-input type="text" v-model="guest" placeholder="Enter title" id="title" required></b-form-input>
         </b-form-group>
       </b-form>
       <div slot="modal-footer">
-        <b-button
-          variant="primary"
-          type="submit"
-          form="joinRoom"
-          class="btn btn-blue-grey"
-        >Confirm</b-button>
+        <b-button variant="primary" type="submit" form="joinRoom" class="btn btn-blue-grey">Confirm</b-button>
       </div>
     </b-modal>
-
 
     <b-modal id="modal-task">
       <b-form @submit.prevent="createRoom" id="createTaskForm">
@@ -77,10 +63,10 @@ export default {
     return {
       formCreateRoom: {
         roomMaster: "",
-        roomName: "",
+        roomName: ""
       },
-      guest : "",
-      currentRoomId : ""
+      guest: "",
+      currentRoomId: ""
     };
   },
 
@@ -90,7 +76,7 @@ export default {
 
   computed: {
     rooms() {
-      return this.$store.state.roomlist;
+      return this.$store.state.roomList;
     }
   },
   methods: {
@@ -111,16 +97,16 @@ export default {
 
     joinRoom() {
       let payload = {
-        roomId : this.currentRoomId,
-        guest : this.guest
-      }
-      this.$store.dispatch("joinRoom", payload)
+        roomId: this.currentRoomId,
+        guest: this.guest
+      };
+      this.$store.dispatch("joinRoom", payload);
       // console.log(id)
-
     }
-  },
-  created() {
-    this.$store.dispatch("getRoom");
   }
+  // ,
+  // created() {
+  //   this.$store.dispatch("getRoom");
+  // }
 };
 </script>

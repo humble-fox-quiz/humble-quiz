@@ -6,24 +6,30 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    roomlist : []
+    roomList : [],
+    questionList :[]
 
   },
   mutations: {
 
     GET_ROOM(state,payload){
-      state.roomlist = payload
-      console.log(payload)
+      state.roomList = payload
+      // console.log(payload)
+    },
+    GET_QUESTION(state, payload){
+      state.questionList = payload
+      // console.log(payload)
     }
 
   },
   actions: {
 
-    createRoom({commit, dispatch}, payload){
+    createRoom({state, commit, dispatch}, payload){
       // console.log(payload)
       let roomMaster  = payload.roomMaster
       let roomName = payload.roomName
-      let roomMasterId
+      let roomMasterId;
+      dispatch("getQuestions")
       db.collection("users")
       .add({
         username : roomMaster
@@ -36,14 +42,15 @@ export default new Vuex.Store({
           roomName,
           players : [{id:data.id, username: roomMaster, score:0}],
           roomMaster : {id:data.id, username : roomMaster},
+          question : state.questionList,
           stage : 0
         })
-        console.log("berhasil menambah user")
       })
       .then(data=>{
-        console.log("room id", data.id)
-        console.log("roomMaster", roomMaster)
-        console.log("roomMasterId", roomMasterId)
+        // console.log("room id", data.id)
+        // console.log("roomMaster", roomMaster)
+        // console.log("roomMasterId", roomMasterId)
+        
       })
       .catch(err=>{
         console.log(err)
@@ -64,11 +71,12 @@ export default new Vuex.Store({
         listrooms.push(obj)
      
       })
+      // console.log(listrooms)
 
       this.commit("GET_ROOM", listrooms)
     })
   },
-  joinRoom({commit, dispatch}, payload){
+  joinRoom({state,commit, dispatch}, payload){
     console.log(payload)
     // console.log("di store")
     let userId;
@@ -97,8 +105,24 @@ export default new Vuex.Store({
     .catch(err=>{
       // console.log("masuk ke error")
     })
+  },
+  getQuestions({commit}){
+    let questionList = []
+    db.collection("questions")
+    .get()
+    .then((questions=>{
+      // console.log(question)
+      questions.forEach(question=>{
+        // console.log(question.data())
+        questionList.push(question.data())
+        // this.$store.commit("")
+      })
+      questionList = questionList.slice(0,10)
+      commit("GET_QUESTION", questionList)
+    }))
+    .catch(err=>{
+      console.log(err)
+    })
   }
-
-
   }
 })

@@ -5,10 +5,10 @@
     <h1 v-if="stage>=stageEnded">Selesai gamenya</h1>
     <h2 v-if="playing">{{stage}}</h2>
     <div v-if="stage>=stageEnded">
-    <div v-for="(player,index) in room.players" :key="index">
-         <h2>{{player.username}}</h2>
-         <h2>{{player.score}}</h2>
-    </div>
+      <div v-for="(player,index) in room.players" :key="index">
+        <h2>{{player.username}}</h2>
+        <h2>{{player.score}}</h2>
+      </div>
     </div>
     <div v-if="stage<stageEnded && playing" class="card">
       <div class="card-body">
@@ -39,7 +39,7 @@ export default {
     return {
       roomId: "",
       stageEnded: 4,
-      canAnswer : false
+      canAnswer: false
     };
   },
   components: {
@@ -50,12 +50,11 @@ export default {
     //   return this.$store.state.questionList;
     // },
     playing() {
-        // console.log(playing)
-        // console.log(this.room.playing)
-        if(this.room){
-            return this.room.playing
-        }
-
+      // console.log(playing)
+      // console.log(this.room.playing)
+      if (this.room) {
+        return this.room.playing;
+      }
     },
     room() {
       // console.log(this.$route.params.id)
@@ -79,80 +78,85 @@ export default {
   },
   methods: {
     triggerPlay() {
-        // let condition = true
-        this.canAnswer = true
-        db.collection("rooms").doc(this.$route.params.id)
-        .update({
-            playing : true,
+      // let condition = true
+      if (localStorage.UserId == this.room.roomMaster.id) {
+        this.canAnswer = true;
+        db.collection("rooms")
+          .doc(this.$route.params.id)
+          .update({
+            playing: true,
             stage: firebase.firestore.FieldValue.increment(1)
-        }).then(()=>{
-            console.log("sukses trigger play")
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+          })
+          .then(() => {
+            console.log("sukses trigger play");
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      else {
+          console.log("you are not authorized to start this game")
+      }
     },
     fetchRoomData() {
       let id = this.$route.params.id;
       db.collection("rooms").doc(this.roomId);
     },
     answer(value) {
-    //   console.log(value);
+      //   console.log(value);
       let answer = value;
       let UserId = "l8050WxgfWsatn4td4xh";
-      let score = this.question[this.stage].correctAnswer==value ? 10 :0 
-      console.log("=========")
-      console.log( this.question[this.stage].correctAnswer)
-      console.log(value)
-      if (this.canAnswer){
-          db.collection("rooms")
-        .doc(this.$route.params.id)
-        .get()
-        .then(data => {
-          let obj = { ...data.data() };
-          obj.players = obj.players.map(el => {
-            if (el.id == UserId) {
-              el.score += score;
-            }
-            return el;
+      let score = this.question[this.stage].correctAnswer == value ? 10 : 0;
+      console.log("=========");
+      console.log(this.question[this.stage].correctAnswer);
+      console.log(value);
+      if (this.canAnswer) {
+        db.collection("rooms")
+          .doc(this.$route.params.id)
+          .get()
+          .then(data => {
+            let obj = { ...data.data() };
+            obj.players = obj.players.map(el => {
+              if (el.id == UserId) {
+                el.score += score;
+              }
+              return el;
+            });
+            //   console.log(obj);
+            return db
+              .collection("rooms")
+              .doc(this.$route.params.id)
+              .set(obj);
+          })
+          .then(data => {
+            console.log("sukses update data");
+            this.canAnswer = false;
+          })
+          .catch(err => {
+            console.log("gagal jing");
           });
-        //   console.log(obj);
-          return db
-            .collection("rooms")
-            .doc(this.$route.params.id)
-            .set(obj);
-        })
-        .then(data => {
-          console.log("sukses update data");
-          this.canAnswer = false
-        })
-        .catch(err => {
-          console.log("gagal jing");
-        });
+      } else {
+        console.log("you already answer this question");
       }
-      else {
-          console.log("you already answer this question")
-      }
-      
     }
   },
   watch: {
     stage(newval) {
-      console.log(this.playing)
+      console.log(this.playing);
 
       if (newval <= 3 && this.playing) {
         //   this.playing()
-        
+
         setTimeout(() => {
           db.collection("rooms")
             .doc(this.$route.params.id)
             .update({
               stage: firebase.firestore.FieldValue.increment(1)
             });
-            this.canAnswer = true
+          this.canAnswer = true;
         }, 10000);
       } else {
-          console.log("game belum berjalan")
+        console.log("game belum berjalan");
       }
     }
   }

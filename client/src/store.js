@@ -41,7 +41,7 @@ export default new Vuex.Store({
           return db.collection("rooms")
             .add({
               roomName,
-              players: [{ id: data.id, username: roomMaster, score: 0 }],
+              players: [{ id: data.id, username: roomMaster, score: 0 , answer:true}],
               roomMaster: { id: data.id, username: roomMaster },
               question: state.questionList,
               playing :false,

@@ -1,16 +1,32 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <backround />
+    <music />
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    </div>-->
+    <router-view />
   </div>
 </template>
+<script>
+import Backround from "@/components/Background";
+import Music from "@/components/Music";
+
+export default {
+  components: {
+    Backround,
+    Music
+  },
+  created() {
+    this.$store.dispatch("getRoom");
+  }
+};
+</script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

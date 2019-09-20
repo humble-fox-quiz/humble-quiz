@@ -1,6 +1,5 @@
 <template>
   <section id="home-page">
-    <background />
     <div class="container">
       <div class="row">
         <div class="col-md-12 d-flex justify-content-between align-items-center my-5">
@@ -9,19 +8,21 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6" v-for="room in rooms" :key="room.id">
+        <div class="col-md-6 my-2" v-for="room in rooms" :key="room.id">
           <div class="card text-left">
             <div class="card-header d-flex justify-content-between">
-              <b>Room's Name: {{room.roomName}}</b>
-              <b>Game Master: {{room.roomMaster.username}}</b>
+              <b>Room : {{room.roomName}}</b>
+              <b>Master : {{room.roomMaster.username}}</b>
             </div>
             <div class="card-body">
               <button
+                v-if="room.stage<1"
                 v-b-modal.modal-join
                 @click="currentRoomId=room.id"
                 class="btn btn-sm btn-primary"
                 style="width:100%"
               >Join</button>
+              <p v-else>Finished</p>
             </div>
           </div>
         </div>
@@ -95,9 +96,6 @@ export default {
       guest: "",
       currentRoomId: ""
     };
-  },
-  components: {
-    Background
   },
   methods: {
     resetModal() {

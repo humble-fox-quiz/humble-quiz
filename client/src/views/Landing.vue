@@ -1,7 +1,5 @@
 <template>
   <section id="landing-page">
-    <backround />
-    <music />
     <div class="container">
       <div class="row">
         <div class="col-md-6 offset-md-3">
@@ -22,19 +20,9 @@
 </template>
 
 <script>
-import Backround from "@/components/Background";
-import Music from "../components/Music";
 
 export default {
   name: "landing",
-  components: {
-    Backround,
-    Music
-  },
-  mounted() {
-    // window.addEventListener("mouseup", this.playMusic);
-  },
-  methods: {}
 };
 </script>
 

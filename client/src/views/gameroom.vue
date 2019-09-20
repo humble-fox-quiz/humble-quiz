@@ -39,7 +39,7 @@ export default {
     return {
       roomId: "",
       stageEnded: 4,
-      canAnswer: false
+      canAnswer: true
     };
   },
   components: {
@@ -74,13 +74,22 @@ export default {
       if (this.room) {
         return this.room.question;
       }
+    },
+    theplayer() {
+      if (this.room) {
+        for (let player of this.room.players) {
+          if (localStorage.getItem("userId") == player.id) {
+            return player.answer;
+          }
+        }
+      }
     }
   },
   methods: {
     triggerPlay() {
       // let condition = true
       if (localStorage.userId == this.room.roomMaster.id) {
-        this.canAnswer = true;
+        // this.canAnswer = true;
         db.collection("rooms")
           .doc(this.$route.params.id)
           .update({
@@ -93,9 +102,8 @@ export default {
           .catch(err => {
             console.log(err);
           });
-      }
-      else {
-          console.log("you are not authorized to start this game")
+      } else {
+        console.log("you are not authorized to start this game");
       }
     },
     fetchRoomData() {
@@ -105,12 +113,13 @@ export default {
     answer(value) {
       //   console.log(value);
       let answer = value;
-      let UserId = localStorage.getItem("userId")
+      let UserId = localStorage.getItem("userId");
       let score = this.question[this.stage].correctAnswer == value ? 10 : 0;
       console.log("=========");
-      console.log(this.question[this.stage].correctAnswer);
-      console.log(value);
-      if (this.canAnswer&&score!==0) {
+      //   console.log(this.theplayer)
+      //   console.log(this.question[this.stage].correctAnswer);
+      //   console.log(value);
+      if (theplayer) {
         db.collection("rooms")
           .doc(this.$route.params.id)
           .get()
@@ -119,6 +128,7 @@ export default {
             obj.players = obj.players.map(el => {
               if (el.id == UserId) {
                 el.score += score;
+                el.answer = false;
               }
               return el;
             });
@@ -130,7 +140,7 @@ export default {
           })
           .then(data => {
             console.log("sukses update data");
-            this.canAnswer = false;
+            // this.canAnswer = false;
           })
           .catch(err => {
             console.log("gagal jing");
@@ -141,28 +151,46 @@ export default {
     }
   },
   watch: {
-    stage(newval,oldvalue) {
+    stage(newval, oldvalue) {
       console.log(this.playing);
-      if (localStorage.userId==this.room.roomMaster.id){
-          if (newval <= 3 && this.playing) {
-            //   this.playing()
-    
-            setTimeout(() => {
-              db.collection("rooms")
-                .doc(this.$route.params.id)
-                .update({
-                  stage: firebase.firestore.FieldValue.increment(1)
+      if (localStorage.userId == this.room.roomMaster.id) {
+        if (newval <= 3 && this.playing) {
+          //   this.playing()
+          setTimeout(() => {
+            let userId = localStorage.getItem("userId");
+            db.collection("rooms")
+              .doc(this.$route.params.id)
+              .get()
+              .then(data => {
+                let obj = { ...data.data() };
+                obj.players = obj.players.map(el => {
+                  if (el.id == userId) {
+                    el.answer = true;
+                  }
+                  return el;
                 });
+                return db
+                  .collection("rooms")
+                  .doc(this.$route.params.id)
+                  .set(obj);
+              })
+              .then(data => {
+                console.log("berhasil reset answer jadi true");
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            db.collection("rooms")
+              .doc(this.$route.params.id)
+              .update({
+                stage: firebase.firestore.FieldValue.increment(1)
+              });
             //   this.canAnswer = true;
-            }, 10000);
-          } else {
-            console.log("game belum berjalan");
-          }
+          }, 10000);
+        } else {
+          console.log("game belum berjalan");
+        }
       }
-      if (newval-oldvalue){
-          this.canAnswer = true;
-      }
-    //   console.log(this.canAnswer)
     }
   }
 };

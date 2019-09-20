@@ -79,7 +79,7 @@ export default {
   methods: {
     triggerPlay() {
       // let condition = true
-      if (localStorage.UserId == this.room.roomMaster.id) {
+      if (localStorage.userId == this.room.roomMaster.id) {
         this.canAnswer = true;
         db.collection("rooms")
           .doc(this.$route.params.id)
@@ -143,20 +143,21 @@ export default {
   watch: {
     stage(newval) {
       console.log(this.playing);
-
-      if (newval <= 3 && this.playing) {
-        //   this.playing()
-
-        setTimeout(() => {
-          db.collection("rooms")
-            .doc(this.$route.params.id)
-            .update({
-              stage: firebase.firestore.FieldValue.increment(1)
-            });
-          this.canAnswer = true;
-        }, 10000);
-      } else {
-        console.log("game belum berjalan");
+      if (localStorage.userId==this.room.roomMaster.id){
+          if (newval <= 3 && this.playing) {
+            //   this.playing()
+    
+            setTimeout(() => {
+              db.collection("rooms")
+                .doc(this.$route.params.id)
+                .update({
+                  stage: firebase.firestore.FieldValue.increment(1)
+                });
+              this.canAnswer = true;
+            }, 10000);
+          } else {
+            console.log("game belum berjalan");
+          }
       }
     }
   }

@@ -43,6 +43,7 @@ export default new Vuex.Store({
               players: [{ id: data.id, username: roomMaster, score: 0 }],
               roomMaster: { id: data.id, username: roomMaster },
               question: state.questionList,
+              playing :false,
               stage: 0
             })
         })

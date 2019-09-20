@@ -105,12 +105,12 @@ export default {
     answer(value) {
       //   console.log(value);
       let answer = value;
-      let UserId = "l8050WxgfWsatn4td4xh";
+      let UserId = localStorage.getItem("userId")
       let score = this.question[this.stage].correctAnswer == value ? 10 : 0;
       console.log("=========");
       console.log(this.question[this.stage].correctAnswer);
       console.log(value);
-      if (this.canAnswer) {
+      if (this.canAnswer&&score!==0) {
         db.collection("rooms")
           .doc(this.$route.params.id)
           .get()
@@ -141,7 +141,7 @@ export default {
     }
   },
   watch: {
-    stage(newval) {
+    stage(newval,oldvalue) {
       console.log(this.playing);
       if (localStorage.userId==this.room.roomMaster.id){
           if (newval <= 3 && this.playing) {
@@ -153,12 +153,16 @@ export default {
                 .update({
                   stage: firebase.firestore.FieldValue.increment(1)
                 });
-              this.canAnswer = true;
+            //   this.canAnswer = true;
             }, 10000);
           } else {
             console.log("game belum berjalan");
           }
       }
+      if (newval-oldvalue){
+          this.canAnswer = true;
+      }
+    //   console.log(this.canAnswer)
     }
   }
 };

@@ -30,41 +30,41 @@ export default new Vuex.Store({
       let roomName = payload.roomName
       let roomMasterId;
       dispatch("getQuestions")
-      .then (()=>{
-        db.collection("users")
-        .add({
-          username: roomMaster
-        })
-        .then(data => {
-          roomMasterId = data.id
-          // console.log(data.name)
-          return db.collection("rooms")
+        .then(() => {
+          db.collection("users")
             .add({
-              roomName,
-              players: [{ id: data.id, username: roomMaster, score: 0 , answer:true}],
-              roomMaster: { id: data.id, username: roomMaster },
-              question: state.questionList,
-              playing :false,
-              stage: 0
+              username: roomMaster
             })
-        })
-        .then(data => {
-          router.push(`/gameroom/${data.id}`);
-          localStorage.setItem('userId', roomMasterId)
-          localStorage.setItem('username', roomMaster)
-          // console.log("room id", data.id)
-          // console.log("roomMaster", roomMaster)
-          // console.log("roomMasterId", roomMasterId)
+            .then(data => {
+              roomMasterId = data.id
+              // console.log(data.name)
+              return db.collection("rooms")
+                .add({
+                  roomName,
+                  players: [{ id: data.id, username: roomMaster, score: 0, answer: true }],
+                  roomMaster: { id: data.id, username: roomMaster },
+                  question: state.questionList,
+                  playing: false,
+                  stage: 0
+                })
+            })
+            .then(data => {
+              router.push(`/gameroom/${data.id}`);
+              localStorage.setItem('userId', roomMasterId)
+              localStorage.setItem('username', roomMaster)
+              // console.log("room id", data.id)
+              // console.log("roomMaster", roomMaster)
+              // console.log("roomMasterId", roomMasterId)
 
+            })
+            .catch(err => {
+              console.log(err)
+            })
         })
         .catch(err => {
           console.log(err)
         })
-      })
-      .catch(err=>{
-        console.log(err)
-      })
-      
+
     },
 
     getRoom({ commit, dispatch }, payload) {
@@ -106,7 +106,7 @@ export default new Vuex.Store({
         .then(room => {
           // console.log(room.data())
           let obj = room.data()
-          obj.players.push({ id: userId, username, score: 0, answer:true})
+          obj.players.push({ id: userId, username, score: 0, answer: true })
           return db.collection("rooms").doc(roomId)
             .set(obj)
           // obj.players = listplayers
@@ -120,23 +120,36 @@ export default new Vuex.Store({
         })
     },
     getQuestions({ commit }) {
+
+      questionIndex = Math.floor(Math.random() * availableQuestions.length)
+      currentQuestion = availableQuestions[questionIndex]
+
+
       let questionList = []
-      return new Promise((resolve, reject)=>{
+      return new Promise((resolve, reject) => {
         db.collection("questions")
-        .get()
-        .then((questions => {
-          // console.log(question)
-          questions.forEach(question => {
-            // console.log(question.data())
-            questionList.push(question.data())
-            // this.$store.commit("")
+          .get()
+          .then((questions => {
+            // console.log(question)
+            questions.forEach(question => {
+              // console.log(question.data())
+              questionList.push(question.data())
+              // this.$store.commit("")
+            })
+
+            if (questionList) {
+              for (let i = 0; i < questionList.length; i++) {
+                let tempArray = []
+
+              }
+            }
+
+            questionList = questionList.slice(0, 10)
+            resolve(commit("GET_QUESTION", questionList))
+          }))
+          .catch(err => {
+            reject(err)
           })
-          questionList = questionList.slice(0, 10)
-          resolve(commit("GET_QUESTION", questionList))
-        }))
-        .catch(err => {
-         reject(err) 
-        })
       })
     }
   }

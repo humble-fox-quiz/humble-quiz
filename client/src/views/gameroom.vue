@@ -1,32 +1,126 @@
 <template>
-  <div class="container">
-    <h1>masuk ke game room</h1>
-    <button @click="triggerPlay" class="btn btn-primary">Let's Play</button>
-    <h1 v-if="stage>=stageEnded">Selesai gamenya</h1>
-    <h2 v-if="playing">{{stage}}</h2>
-    <div v-if="stage>=stageEnded">
-      <div v-for="(player,index) in room.players" :key="index">
-        <h2>{{player.username}}</h2>
-        <h2>{{player.score}}</h2>
-      </div>
-    </div>
-    <div v-if="stage<stageEnded && playing" class="card">
-      <div class="card-body">
-        <p class="card-text">{{question[stage].content}}</p>
-      </div>
-      <div class="card-footer">
-        <div class="row mb-4">
-          <div
-            v-for="(choice,index) in question[stage].choices"
-            :key="index"
-            :choice="choice"
-            class="col-3"
-          >
-            <button class="btn btn-primary" @click="answer(choice)">{{choice}}</button>
+  <div>
+    <section v-if="!playing && stage<1" id="waiting-page">
+      <backround />
+
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card text-left">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <b>{{room.roomName}}</b>
+                <button class="btn btn-danger btn-sm">Delete Room</button>
+              </div>
+              <div class="card-body">
+                <ul class="list-group">
+                  <li
+                    class="list-group-item d-flex justify-content-between"
+                    v-for="(player,index) in room.players"
+                    :key="index"
+                  >
+                    {{player.username}}
+                    <router-link to="/home">
+                      <button class="btn btn-sm btn-warning">Leave Room</button>
+                    </router-link>
+                  </li>
+                </ul>
+                <button @click="triggerPlay" class="btn btn-primary my-3" style="width:100%">Start</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Start game! -->
+    <section id="game-page" v-if="stage<stageEnded && playing">
+      <div class="container py-5">
+        <div class="row mb-5">
+          <div class="col-md-12 d-flex justify-content-center">
+            <h1>Stage: {{stage}}</h1>
+            <!-- <h1>10 sec</h1> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 d-flex justify-content-center">
+            <!-- <img src="https://via.placeholder.com/150" alt /> -->
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-md-12 my-3">
+            <h3>{{question[stage].content}}</h3>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 my-2">
+                <button
+                  class="btn btn-primary"
+                  style="width:100%"
+                  @click="answer(question[stage].choices[0])"
+                >{{question[stage].choices[0]}}</button>
+              </div>
+              <div class="col-md-6 my-2">
+                <button
+                  class="btn btn-primary"
+                  style="width:100%"
+                  @click="answer(question[stage].choices[1])"
+                >{{question[stage].choices[1]}}</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 my-2">
+                <button
+                  class="btn btn-primary"
+                  style="width:100%"
+                  @click="answer(question[stage].choices[2])"
+                >{{question[stage].choices[2]}}</button>
+              </div>
+              <div class="col-md-6 my-2">
+                <button
+                  class="btn btn-primary"
+                  style="width:100%"
+                  @click="answer(question[stage].choices[3])"
+                >{{question[stage].choices[3]}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result Page -->
+
+    <section id="result-page" v-if="stage>=stageEnded">
+      <backround />
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card text-left">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <b>Nama Room</b>
+                <button class="btn btn-danger btn-sm">Delete Room</button>
+              </div>
+              <div class="card-body">
+                <ul class="list-group">
+                  <li
+                    v-for="(player,index) in room.players"
+                    :key="index"
+                    class="list-group-item d-flex justify-content-between"
+                  >
+                    <span>{{player.username}}</span>
+                    <span>Score : {{player.score}}</span>
+                    <router-link to="/home">
+                      <button class="btn btn-sm btn-warning">Leave Room</button>
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -152,7 +246,7 @@ export default {
   },
   watch: {
     stage(newval, oldvalue) {
-    //   console.log(this.playing);
+      //   console.log(this.playing);
       if (localStorage.userId == this.room.roomMaster.id) {
         if (newval <= 5 && this.playing) {
           //   this.playing()
@@ -164,9 +258,9 @@ export default {
               .then(data => {
                 let obj = { ...data.data() };
                 obj.players = obj.players.map(el => {
-                //   if (el.id == userId) {
-                    el.answer = true;
-                //   }
+                  //   if (el.id == userId) {
+                  el.answer = true;
+                  //   }
                   return el;
                 });
                 return db

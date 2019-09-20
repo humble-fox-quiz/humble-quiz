@@ -12,9 +12,9 @@
             class="form-control text-center my-3"
             placeholder="Enter Your Name"
           />-->
-          <button class="btn btn-primary px-4 mt-3">
-            <router-link to="/home">Let's Play</router-link>
-          </button>
+          <router-link to="/home">
+            <button class="btn btn-primary px-4 mt-3">Let's Play</button>
+          </router-link>
         </div>
       </div>
     </div>
